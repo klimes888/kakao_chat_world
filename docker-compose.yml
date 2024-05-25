@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+    web:
+        build: .
+        container_name: chatbot-web
+        command: flask run --host=0.0.0.0 --port=5555
+        ports:
+            - "5555:5555"
+        depends_on:
+            - db
+        environment:
+            - DATABASE_URL=postgresql://lunar:1111@db:5432/chatbotdb
+        volumes:
+            - .:/app
+            - /app/venv
+
+    db:
+        image: postgres:13
+        container_name: chatbot-db
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: chatbotdb
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:
