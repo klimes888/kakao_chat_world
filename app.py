@@ -1,13 +1,41 @@
+import debugpy
+import os
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+load_dotenv()
 
 app = Flask(__name__)
+
+# debugpy.listen(("0.0.0.0", 5678))
+# print("Debugger is listening on port 5678")
+# debugpy.wait_for_client()
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# SQLAlchemy 초기화
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(100), nullable=False)
+
+
+# 데이터베이스 초기화 (첫 실행 시)
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/", methods=["POST"])
 def index():
     body = request.get_json()
     print(body)
-    app.logger.debug(f"test ---------<{body['userRequest']}")
 
     responseBody = {
         "version": "2.0",
