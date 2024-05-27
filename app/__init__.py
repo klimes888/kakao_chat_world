@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from .extensions import db, migrate
 from .blueprints.main.routes import main
+from .blueprints.user.routes import user
 import logging
 
 load_dotenv()
@@ -26,10 +27,10 @@ def create_app():
 
     # 블루프린트 등록
     app.register_blueprint(main)
+    app.register_blueprint(user)
 
     # 로그 설정
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
     with app.app_context():
         db.create_all()

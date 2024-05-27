@@ -23,7 +23,7 @@ class Content(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime, nullable=True)
     remove_at = Column(DateTime, nullable=True)
-    sub_contents = relationship("SubContent", back_populates="content")
+    sub_content = relationship("SubContent", back_populates="content")
 
     def __repr__(self):
         return f"<Content(name={self.name}, chat_id={self.id})>"
@@ -70,7 +70,7 @@ class Assignment(db.Model):
     update_at = Column(DateTime, nullable=True)
     remove_at = Column(DateTime, nullable=True)
     user = relationship("User", back_populates="assignment")
-    content = relationship("SubContent", back_populates="assignment")
+    sub_content = relationship("SubContent", back_populates="assignment")
 
     def __repr__(self):
         return f"<Assignment(user_id={self.user_id}, organization_id={self.sub_content_id}, role={self.role})>"
@@ -86,7 +86,7 @@ class ForceDefense(db.Model):
     count = Column(String(12), nullable=False)  # 병력 수
     value = Column(JSON, nullable=False)
     update_at = Column(DateTime, nullable=True)
-    content = relationship("SubContent", back_populates="force_defense")
+    sub_content = relationship("SubContent", back_populates="force_defense")
 
     def __repr__(self):
         return f"<ForceDefense(name={self.type}, value={self.value})>"
@@ -110,7 +110,7 @@ class Weapon(db.Model):
 
 # 운영에서 관리하는 무기 리스트 (무기 장비와 다대다)
 class WeaponList(db.Model):
-    __tablename__ = "weapon"
+    __tablename__ = "weapon_list"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(40), nullable=False)  # 무기 이름
     desc = Column(String(300), nullable=False)  # 무기 설명
@@ -119,7 +119,7 @@ class WeaponList(db.Model):
     generation = Column(String(4), nullable=False)  # 무기 세대
 
     def __repr__(self):
-        return f"<Weapon(name={self.name}, chat_id={self.id})>"
+        return f"<WeaponList(name={self.name}, chat_id={self.id})>"
 
 
 class ContentDto(BaseModel):

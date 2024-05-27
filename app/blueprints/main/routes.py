@@ -1,7 +1,7 @@
 import logging
 from flask import Flask, jsonify, request, Blueprint
 
-main = Blueprint("main", __name__)
+main = Blueprint("main", __name__, url_prefix="/main")
 logger = logging.getLogger(__name__)
 
 
