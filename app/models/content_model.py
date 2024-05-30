@@ -13,17 +13,38 @@ from sqlalchemy import (
 )
 
 
+# 콘텐츠 월드 (각 톡방 마다 하나씩 존재)
+class World(db.Model):
+    __tablename__ = "world"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    bot_id = Column(String(120), unique=True, nullable=False)
+    name = Column(String(40), nullable=False)  # world 이름
+    desc = Column(String(300), nullable=False)  # world 설명
+    image_url = Column(String(120), nullable=False)  # 콘텐츠 대표 썸네일
+    create_at = Column(DateTime, default=datetime.now(), nullable=False)
+    update_at = Column(DateTime)
+    remove_at = Column(DateTime)
+    content = relationship("Content", back_populates="world")
+    assignment = relationship("Assignment", back_populates="world", uselist=False)
+
+    def __repr__(self):
+        return f"<World(name={self.name}, chat_id={self.id})>"
+
+
 # 콘텐츠 모델 (국가)
 class Content(db.Model):
     __tablename__ = "content"
     id = Column(Integer, primary_key=True, autoincrement=True)
+    world_id = Column(Integer, ForeignKey("world.id"), nullable=False)
     name = Column(String(40), nullable=False)  # 콘텐츠 이름
-    desc = Column(String(150), nullable=False)  # 콘텐츠 설명
+    desc = Column(String(300), nullable=False)  # 콘텐츠 설명
     image_url = Column(String(120), nullable=False)  # 콘텐츠 대표 썸네일
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
-    update_at = Column(DateTime, nullable=True)
-    remove_at = Column(DateTime, nullable=True)
+    update_at = Column(DateTime)
+    remove_at = Column(DateTime)
+    world = relationship("World", back_populates="subContent")
     sub_content = relationship("SubContent", back_populates="content")
+    assignment = relationship("Assignment", back_populates="content")
 
     def __repr__(self):
         return f"<Content(name={self.name}, chat_id={self.id})>"
@@ -39,8 +60,8 @@ class SubContent(db.Model):
     type = Column(SmallInteger, nullable=False)  #  타입 SubContentType 참고
     value = Column(JSON, nullable=False)
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
-    update_at = Column(DateTime, nullable=True)
-    remove_at = Column(DateTime, nullable=True)
+    update_at = Column(DateTime)
+    remove_at = Column(DateTime)
     content = relationship("Content", back_populates="sub_content")
     assignment = relationship("Assignment", back_populates="sub_content")
     force_defense = relationship("ForceDefense", back_populates="sub_content")
@@ -64,12 +85,16 @@ class Assignment(db.Model):
     __tablename__ = "assignment"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
-    sub_content_id = Column(Integer, ForeignKey("sub_content.id"), nullable=False)
+    world_id = Column(Integer, ForeignKey("world.id"))
+    content_id = Column(Integer, ForeignKey("content.id"))
+    sub_content_id = Column(Integer, ForeignKey("sub_content.id"))
     role = Column(String(50), nullable=False)  # UserRole enum 참고
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
-    update_at = Column(DateTime, nullable=True)
-    remove_at = Column(DateTime, nullable=True)
+    update_at = Column(DateTime)
+    remove_at = Column(DateTime)
     user = relationship("User", back_populates="assignment")
+    world = relationship("World", back_populates="assignment")
+    content = relationship("Content", back_populates="assignment")
     sub_content = relationship("SubContent", back_populates="assignment")
 
     def __repr__(self):
@@ -85,7 +110,7 @@ class ForceDefense(db.Model):
     type = Column(SmallInteger, nullable=False)  #  타입 ForceDefenseType 참고
     count = Column(String(12), nullable=False)  # 병력 수
     value = Column(JSON, nullable=False)
-    update_at = Column(DateTime, nullable=True)
+    update_at = Column(DateTime)
     sub_content = relationship("SubContent", back_populates="force_defense")
 
     def __repr__(self):
@@ -101,8 +126,8 @@ class Weapon(db.Model):
     image_url = Column(String(120), nullable=False)  # 무기 대표 썸네일
     count = Column(String(12), nullable=False)  # 무기 수
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
-    update_at = Column(DateTime, nullable=True)
-    remove_at = Column(DateTime, nullable=True)
+    update_at = Column(DateTime)
+    remove_at = Column(DateTime)
 
     def __repr__(self):
         return f"<Weapon(name={self.name}, chat_id={self.id})>"

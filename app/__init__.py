@@ -26,8 +26,8 @@ def create_app():
     migrate.init_app(app, db)
 
     # 블루프린트 등록
-    app.register_blueprint(main)
-    app.register_blueprint(user)
+    app.register_blueprint(main, url_prefix="/main")
+    app.register_blueprint(user, url_prefix="/user")
 
     # 로그 설정
     logging.basicConfig(level=logging.INFO)

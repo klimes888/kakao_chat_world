@@ -1,7 +1,7 @@
 import logging
 from flask import Flask, jsonify, request, Blueprint
 
-main = Blueprint("main", __name__, url_prefix="/main")
+main = Blueprint("main", __name__)
 logger = logging.getLogger(__name__)
 
 
@@ -10,9 +10,9 @@ def health_check():
     return {"status": "ok"}, 200
 
 
-@main.route("/", methods=["POST"])
+@main.route("/world", methods=["POST"])
 def index():
     body = request.get_json()
     # logger.info(body)
-    print(f"test: {body}")
+    print(f"world: {body}")
     return "test!"

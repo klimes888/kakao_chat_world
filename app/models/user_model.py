@@ -14,7 +14,9 @@ class User(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime, nullable=True)
     remove_at = Column(DateTime, nullable=True)
-    assignment = relationship("Assignment", back_populates="user")
+    assignments = relationship(
+        "Assignment", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User(name={self.name}, chat_id={self.chat_id})>"
