@@ -20,7 +20,7 @@ class World(db.Model):
     bot_id = Column(String(120), unique=True, nullable=False)
     name = Column(String(40), nullable=False)  # world 이름
     desc = Column(String(300), nullable=False)  # world 설명
-    image_url = Column(String(120), nullable=False)  # 콘텐츠 대표 썸네일
+    image_url = Column(String(120))  # 콘텐츠 대표 썸네일
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)

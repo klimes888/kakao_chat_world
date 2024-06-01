@@ -4,16 +4,25 @@ from app.utils import codes
 
 class CustomResponse:
     @staticmethod
-    def success(code="0000", status=200, data=None):
-        response = {
-            "status": "success",
-            "code": code,
-            "message": codes[code],
-            "data": data,
+    def simpleText(code="0000", outputs=[]):
+        responseBody = {
+            "version": "2.0",
+            "template": {"outputs": outputs},
         }
-        return jsonify(response), status
+        return jsonify(responseBody)
 
     @staticmethod
-    def error(code="0001", status=500):
-        response = {"status": "error", "code": code, "message": codes[code]}
-        return jsonify(response), status
+    def simpleImage(self, code="0001", outputs=[]):
+        responseBody = {
+            "version": "2.0",
+            "template": {"outputs": outputs},
+        }
+        return jsonify(responseBody)
+
+
+#   {
+#       "simpleImage": {
+#           "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
+#           "altText": "hello I'm Ryan",
+#       }
+#   },
