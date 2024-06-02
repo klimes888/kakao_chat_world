@@ -26,9 +26,6 @@ def index():
 
     parse = parse_text_dto(utterance)
 
-    parse["user_id"] = user
-    parse["chat_id"] = None
-
     success_output = [
         {
             "simpleText": {"text": "안녕 hello I'm Ryan"},
@@ -46,7 +43,10 @@ def index():
     if parse == None:
         return CustomResponse.simpleText("0001", fail_output)
 
+    # parse["user_id"] = user
+    parse["bot_id"] = "test1234"
+
     # 세계 등록
-    WorldService.add_world(parse)
+    world = WorldService.add_world(parse)
 
     return CustomResponse.simpleText("0000", success_output)

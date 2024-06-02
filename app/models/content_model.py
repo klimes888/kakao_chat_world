@@ -24,7 +24,7 @@ class World(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    content = relationship("Content", back_populates="world")
+    # content = relationship("Content", back_populates="world")
     assignment = relationship("Assignment", back_populates="world", uselist=False)
 
     def __repr__(self):
@@ -42,8 +42,8 @@ class Content(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    world = relationship("World", back_populates="subContent")
-    sub_content = relationship("SubContent", back_populates="content")
+    world = relationship("World")
+    # sub_content = relationship("SubContent", back_populates="content")
     assignment = relationship("Assignment", back_populates="content")
 
     def __repr__(self):
@@ -62,7 +62,7 @@ class SubContent(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    content = relationship("Content", back_populates="sub_content")
+    content = relationship("Content")
     assignment = relationship("Assignment", back_populates="sub_content")
     force_defense = relationship("ForceDefense", back_populates="sub_content")
 
@@ -92,10 +92,10 @@ class Assignment(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    user = relationship("User", back_populates="assignment")
-    world = relationship("World", back_populates="assignment")
-    content = relationship("Content", back_populates="assignment")
-    sub_content = relationship("SubContent", back_populates="assignment")
+    user = relationship("User")
+    world = relationship("World")
+    content = relationship("Content")
+    sub_content = relationship("SubContent")
 
     def __repr__(self):
         return f"<Assignment(user_id={self.user_id}, organization_id={self.sub_content_id}, role={self.role})>"
