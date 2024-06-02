@@ -1,9 +1,9 @@
 class WorldDto:
-    def __init__(self, name, desc, bot_id, image_url):
-        self.name = name
-        self.desc = desc
-        self.image_url = image_url
-        self.bot_id = bot_id
+    def __init__(self, **kwargs):
+        self.name = kwargs.get("name", None)
+        self.desc = kwargs.get("desc", None)
+        self.bot_id = kwargs.get("bot_id", None)
+        self.image_url = kwargs.get("image_url", None)
 
     def to_dict(self):
         return {

@@ -12,7 +12,6 @@ def index():
     body = request.get_json()
     # user_data = body["data"]
     # user = UserService.add_user(user_data)
-    logger.info(f"body ----> {body}")
     output = [
         {
             "simpleText": {"text": "안녕 hello I'm Ryan"},

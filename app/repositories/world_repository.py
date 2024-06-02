@@ -16,6 +16,13 @@ class WorldRepository:
         db.session.commit()
         return new_item
 
+    def query_world(world: WorldDto):
+        world_dict = world.to_dict()
+        query_item = World(**world_dict)
+        result = db.session.query(query_item).first()
+
+        return result
+
     # @staticmethod
     # def get_user_by_chat_id(name):
     #     return User.query.filter_by(name=name).first()

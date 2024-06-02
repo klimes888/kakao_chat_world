@@ -43,10 +43,11 @@ def index():
     if parse == None:
         return CustomResponse.simpleText("0001", fail_output)
 
-    # parse["user_id"] = user
+    parse["chat_id"] = user
     parse["bot_id"] = "test1234"
 
     # 세계 등록
-    world = WorldService.add_world(parse)
+    WorldService.add_world(parse)
+    # world = WorldService.query_world(parse)
 
     return CustomResponse.simpleText("0000", success_output)

@@ -25,7 +25,7 @@ class World(db.Model):
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
     # content = relationship("Content", back_populates="world")
-    assignment = relationship("Assignment", back_populates="world", uselist=False)
+    assignment = relationship("Assignment", back_populates="world")
 
     def __repr__(self):
         return f"<World(name={self.name}, chat_id={self.id})>"
@@ -78,27 +78,6 @@ class Status(db.Model):
 
     def __repr__(self):
         return f"<Status(type={self.type}, state_id={self.id})>"
-
-
-# 해당 콘텐츠에서 역할
-class Assignment(db.Model):
-    __tablename__ = "assignment"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
-    world_id = Column(Integer, ForeignKey("world.id"))
-    content_id = Column(Integer, ForeignKey("content.id"))
-    sub_content_id = Column(Integer, ForeignKey("sub_content.id"))
-    role = Column(String(50), nullable=False)  # UserRole enum 참고
-    create_at = Column(DateTime, default=datetime.now(), nullable=False)
-    update_at = Column(DateTime)
-    remove_at = Column(DateTime)
-    user = relationship("User")
-    world = relationship("World")
-    content = relationship("Content")
-    sub_content = relationship("SubContent")
-
-    def __repr__(self):
-        return f"<Assignment(user_id={self.user_id}, organization_id={self.sub_content_id}, role={self.role})>"
 
 
 # 국방
