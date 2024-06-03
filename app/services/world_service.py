@@ -21,54 +21,22 @@ fail_output = [
 class WorldService:
     @staticmethod
     def add_world(data):
-        # user_data = UserDto(name=data["chat_id"], chat_id=data["chat_id"])
+        user_data = UserDto(name="test1", chat_id=data["chat_id"])
+        # user_data = UserDto(name="test1", chat_id="test2")
 
-        # user_result = UserRepository.add_user_flush(user_data)
-
-        # world_data = WorldDto(**data)
-
-        # world_result = WorldRepository.add_world(world_data)
-        # assignment_data = AssignmentDto(role=UserRole.ADMIN)
-        # UserRepository.add_assignment(user_result, world_result, assignment_data)
-        # try:
-        #     user_data = UserDto(name=data["chat_id"], chat_id=data["chat_id"])
-        #     user_result = UserRepository.add_user_flush(user_data)
-        #     logger.info(f" ---> user_result: {user_result}")
-
-        #     world_data = WorldDto(**data)
-        #     world_result = WorldRepository.add_world(world_data)
-        #     assignment_data = AssignmentDto(role=UserRole.ADMIN)
-        #     UserRepository.add_assignment(user_result, world_result, assignment_data)
-
-        #     # db.session.commit()
-        # except Exception as e:
-        #     db.session.rollback()
-        #     return CustomResponse.simpleText("0001", fail_output)
-        user_data = UserDto(name="test", chat_id=data["chat_id"])
-        user_dict = user_data.to_dict()
-        user_item = User(**user_dict)
-        db.session.add(user_item)
-        db.session.flush()
+        user_result = UserRepository.add_user_flush(user_data)
 
         world_data = WorldDto(**data)
-        world_dict = world_data.to_dict()
-        world_item = World(**world_dict)
-        db.session.add(world_item)
-        db.session.flush()
 
+        world_result = WorldRepository.add_world(world_data)
         assignment_item = AssignmentDto(
-            user_id=user_item.id, world_id=world_item.id, role=UserRole["ADMIN"].value
+            user_id=user_result.id,
+            world_id=world_result.id,
+            role=UserRole["ADMIN"].value,
         )
-
-        assignment_data = assignment_item.to_dict()
-
-        new_item = Assignment(**assignment_data)
-
-        db.session.add(new_item)
-        db.session.commit()
+        UserRepository.add_assignment(assignment_item)
 
     def query_world(data: dict):
-
         world_data = WorldDto(**data)
         world = WorldRepository.query_world(world_data)
         return world
