@@ -46,7 +46,23 @@ class WorldService:
             role=UserRole["ADMIN"].value,
         )
         UserRepository.add_assignment(assignment_item)
-        code = get_code("0000").format(world_data.name, user_data.name, world_data.desc)
+
+        code = get_code("0000").format(data["name"], user_data.name, world_data.desc)
+        return CustomResponse.simpleText(code)
+
+    @staticmethod
+    def query_world_with_user(bot_id):
+        world = WorldRepository.query_world_with_user(bot_id)
+        logger.info(f"world content {world.content}")
+        logger.info(f"world name {world.name}")
+
+        code = get_code("0003").format(
+            world.name,
+            world.assignment[0].user.name,
+            world.desc,
+            len(world.content),
+            0,
+        )
         return CustomResponse.simpleText(code)
 
     @staticmethod

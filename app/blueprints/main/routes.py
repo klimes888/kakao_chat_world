@@ -29,8 +29,8 @@ def health_check():
     return {"status": "ok"}, 200
 
 
-@main.route("/world", methods=["POST"])
-def index():
+@main.route("/create", methods=["POST"])
+def create_wolrd():
     body = request.get_json()
     # 딕셔너리를 클래스 인스턴스로 변환
     userRequest = body["userRequest"]
@@ -51,3 +51,17 @@ def index():
 
     # 세계 등록
     return WorldService.add_world(parse)
+
+
+@main.route("/query", methods=["POST"])
+def query_wolrd():
+    body = request.get_json()
+    bot_id = body["bot"]["id"]
+
+    code = get_code("0002")
+
+    if bot_id == None:
+        return CustomResponse.simpleText(code)
+
+    # 세계 등록
+    return WorldService.query_world_with_user(bot_id)

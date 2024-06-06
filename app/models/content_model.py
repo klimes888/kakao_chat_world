@@ -24,7 +24,7 @@ class World(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    # content = relationship("Content", back_populates="world")
+    content = relationship("Content", back_populates="world", lazy="select")
     assignment = relationship("Assignment", back_populates="world")
 
     def __repr__(self):
@@ -35,15 +35,15 @@ class World(db.Model):
 class Content(db.Model):
     __tablename__ = "content"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    world_id = Column(Integer, ForeignKey("world.id"), nullable=False)
+    world_id = Column(Integer, ForeignKey("world.id"), nullable=True)
     name = Column(String(40), nullable=False)  # 콘텐츠 이름
     desc = Column(String(300), nullable=False)  # 콘텐츠 설명
     image_url = Column(String(120), nullable=False)  # 콘텐츠 대표 썸네일
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    world = relationship("World")
-    # sub_content = relationship("SubContent", back_populates="content")
+    world = relationship("World", back_populates="content")
+    sub_content = relationship("SubContent", back_populates="content", lazy="select")
     assignment = relationship("Assignment", back_populates="content")
 
     def __repr__(self):
@@ -54,7 +54,7 @@ class Content(db.Model):
 class SubContent(db.Model):
     __tablename__ = "sub_content"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    content_id = Column(Integer, ForeignKey("content.id"), nullable=False)
+    content_id = Column(Integer, ForeignKey("content.id"), nullable=True)
     desc = Column(String(150), nullable=False)  # 콘텐츠 설명
     name = Column(String(40), nullable=False)  # 콘텐츠 이름
     type = Column(SmallInteger, nullable=False)  #  타입 SubContentType 참고
@@ -62,7 +62,7 @@ class SubContent(db.Model):
     create_at = Column(DateTime, default=datetime.now(), nullable=False)
     update_at = Column(DateTime)
     remove_at = Column(DateTime)
-    content = relationship("Content")
+    content = relationship("Content", back_populates="sub_content")
     assignment = relationship("Assignment", back_populates="sub_content")
     force_defense = relationship("ForceDefense", back_populates="sub_content")
 
