@@ -7,6 +7,7 @@ user = Blueprint("user", __name__)
 logger = logging.getLogger(__name__)
 
 
+# 유저 등록
 @user.route("/create", methods=["POST"])
 def index():
     body = request.get_json()

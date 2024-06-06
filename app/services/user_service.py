@@ -10,8 +10,15 @@ class UserService:
     def add_user(data: dict):
 
         user_data = UserDto(**data)
-        user = UserRepository.add_user(user_data)
+        user = UserRepository.add_user_commit(user_data)
         return user
         # if user:
         # raise ValueError("Item already exists")
         # return UserRepository.add_inventory_item(name, quantity)
+
+    @staticmethod
+    def query_user(data: dict):
+        data["name"] = data["user"]  # user -> name 변경
+        user_data = UserDto(**data)
+        user = UserRepository.query_user_by_name(user_data)
+        return user

@@ -4,15 +4,22 @@ from app.utils import codes
 
 class CustomResponse:
     @staticmethod
-    def simpleText(code="0000", outputs=[]):
+    def simpleText(text=""):
+
         responseBody = {
             "version": "2.0",
-            "template": {"outputs": outputs},
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {"text": text},
+                    }
+                ]
+            },
         }
         return jsonify(responseBody)
 
     @staticmethod
-    def simpleImage(self, code="0001", outputs=[]):
+    def simpleImage(outputs=[]):
         responseBody = {
             "version": "2.0",
             "template": {"outputs": outputs},

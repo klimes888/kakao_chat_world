@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask
+
+from .blueprints.content.routes import content
 from .extensions import db, migrate
 from .blueprints.main.routes import main
 from .blueprints.user.routes import user
@@ -28,6 +30,7 @@ def create_app():
     # 블루프린트 등록
     app.register_blueprint(main, url_prefix="/main")
     app.register_blueprint(user, url_prefix="/user")
+    app.register_blueprint(content, url_prefix="/content")
 
     # 로그 설정
     logging.basicConfig(level=logging.INFO)

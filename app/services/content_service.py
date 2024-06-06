@@ -7,34 +7,21 @@ from app.models.content_model import World
 from app.models.user_model import Assignment, User
 from app.repositories.user_repository import UserRepository
 from app.repositories.world_repository import WorldRepository
-from app.services.user_service import UserService
 from app.types.enums import UserRole
-from app.utils.codes import get_code
 from app.utils.custom_response import CustomResponse
 
 logger = logging.getLogger(__name__)
 fail_output = [
     {
-        "simpleText": {"text": "이미 유저나 세계가 존재합니다"},
+        "simpleText": {"text": "서버 에러가 발생했습니다"},
     }
 ]
 
 
-class WorldService:
+class ContentService:
     @staticmethod
-    def add_world(data):
-        # 세계 검증
-        is_exist = WorldService.query_world(data)
-        code = get_code("0001")
-        if is_exist:
-            return CustomResponse.simpleText(code)
-
-        is_exist_user = UserService.query_user(data)
-
-        if is_exist_user:
-            return CustomResponse.simpleText(code)
-
-        user_data = UserDto(name=data["user"], chat_id=data["chat_id"])
+    def add_country(data):
+        user_data = UserDto(name="testwt1", chat_id=data["chat_id"])
         user_result = UserRepository.add_user_flush(user_data)
 
         world_data = WorldDto(**data)
@@ -46,11 +33,8 @@ class WorldService:
             role=UserRole["ADMIN"].value,
         )
         UserRepository.add_assignment(assignment_item)
-        code = get_code("0000").format(world_data.name, user_data.name, world_data.desc)
-        return CustomResponse.simpleText(code)
 
-    @staticmethod
     def query_world(data: dict):
         world_data = WorldDto(**data)
-        world = WorldRepository.query_world_by_name(world_data)
+        world = WorldRepository.query_world(world_data)
         return world

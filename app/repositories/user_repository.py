@@ -1,5 +1,7 @@
 import logging
 from datetime import datetime
+
+from sqlalchemy import or_
 from app.dto.assignment_dto import AssignmentDto
 from app.dto.world_dto import WorldDto
 from app.extensions import db
@@ -33,3 +35,12 @@ class UserRepository:
         db.session.add(new_item)
         db.session.commit()
         return new_item
+
+    @staticmethod
+    def query_user_by_name(user: UserDto):
+        result = (
+            db.session.query(User)
+            .filter(or_(User.name == user.name, User.chat_id == user.chat_id))
+            .first()
+        )
+        return result
