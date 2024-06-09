@@ -4,6 +4,26 @@ from app.utils import codes
 
 class CustomResponse:
     @staticmethod
+    def text_with_img(text="", img_url=""):
+
+        responseBody = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleImage": {
+                            "imageUrl": img_url,
+                            "altText": "img_url",
+                        },
+                    },
+                    {
+                        "simpleText": {"text": text},
+                    },
+                ]
+            },
+        }
+        return jsonify(responseBody)
+
     def simpleText(text=""):
 
         responseBody = {

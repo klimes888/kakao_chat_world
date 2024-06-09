@@ -35,3 +35,8 @@ class WorldRepository:
     def query_world_by_name(world: WorldDto):
         result = db.session.query(World).filter_by(name=world.name).first()
         return result
+
+    # bot id로 world 쿼리
+    def query_world_by_bot(world: WorldDto):
+        result = db.session.query(World).filter_by(bot_id=world.bot_id).first()
+        return result

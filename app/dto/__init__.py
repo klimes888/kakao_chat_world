@@ -17,7 +17,7 @@ def parse_text_dto(text):
     # key-value 쌍을 추출하고 공백을 트림
     params = dict(re.findall(r"(\w+)\s*=\s*([^,]+)", inner_text))
     params = {k: v.strip() for k, v in params.items()}
-    # WorldDto 객체 생성
+
     name = params.get("이름", None)
     user = params.get("유저", None)
     desc = params.get("설명", None)

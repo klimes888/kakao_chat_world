@@ -1,23 +1,23 @@
 import logging
-from app.dto.assignment_dto import AssignmentDto
-from app.extensions import db
-from app.dto.user_dto import UserDto
-from app.dto.world_dto import WorldDto
-from app.models.content_model import World
-from app.models.user_model import Assignment, User
+
+# repositories
 from app.repositories.user_repository import UserRepository
 from app.repositories.world_repository import WorldRepository
+
+# services
 from app.services.user_service import UserService
-from app.types.enums import UserRole
+
+# utils
 from app.utils.codes import get_code
 from app.utils.custom_response import CustomResponse
 
+# types
+from app.types.enums import UserRole
+from app.dto.assignment_dto import AssignmentDto
+from app.dto.user_dto import UserDto
+from app.dto.world_dto import WorldDto
+
 logger = logging.getLogger(__name__)
-fail_output = [
-    {
-        "simpleText": {"text": "이미 유저나 세계가 존재합니다"},
-    }
-]
 
 
 class WorldService:
@@ -63,10 +63,16 @@ class WorldService:
             len(world.content),
             0,
         )
-        return CustomResponse.simpleText(code)
+        return CustomResponse.text_with_img(code, world.image_url)
 
     @staticmethod
     def query_world(data: dict):
         world_data = WorldDto(**data)
         world = WorldRepository.query_world_by_name(world_data)
+        return world
+
+    @staticmethod
+    def query_world_by_bot(data: dict):
+        world_data = WorldDto(**data)
+        world = WorldRepository.query_world_by_bot(world_data)
         return world

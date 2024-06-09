@@ -22,3 +22,10 @@ class UserService:
         user_data = UserDto(**data)
         user = UserRepository.query_user_by_name(user_data)
         return user
+
+    # 국가 주인이 존재하는지 여부
+    def query_country_owner(data: dict):
+        data["name"] = data["user"]  # user -> name 변경
+        user_data = UserDto(**data)
+        user = UserRepository.query_user_own_country(user_data)
+        return user

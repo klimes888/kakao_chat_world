@@ -1,7 +1,8 @@
 import logging
 from datetime import datetime
 
-from sqlalchemy import or_
+from sqlalchemy import or_, orm
+from sqlalchemy.orm import joinedload
 from app.dto.assignment_dto import AssignmentDto
 from app.dto.world_dto import WorldDto
 from app.extensions import db
@@ -41,6 +42,21 @@ class UserRepository:
         result = (
             db.session.query(User)
             .filter(or_(User.name == user.name, User.chat_id == user.chat_id))
+            .first()
+        )
+        return result
+
+    @staticmethod
+    def query_user_own_country(user: UserDto):
+        result = (
+            db.session.query(User)
+            .join(Assignment, User.id == Assignment.user_id)
+            .options(joinedload(User.assignment).joinedload(Assignment.content))
+            .filter(
+                User.chat_id == user.chat_id,
+                Assignment.content_id != None,
+                User.name == user.name,
+            )
             .first()
         )
         return result

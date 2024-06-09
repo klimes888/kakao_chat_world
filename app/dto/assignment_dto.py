@@ -3,10 +3,12 @@ class AssignmentDto:
         self.role = kwargs.get("role", None)
         self.user_id = kwargs.get("user_id", None)
         self.world_id = kwargs.get("world_id", None)
+        self.content_id = kwargs.get("content_id", None)
 
     def to_dict(self):
         return {
             "role": self.role,
             "user_id": self.user_id,
             "world_id": self.world_id,
+            "content_id": self.content_id,
         }
