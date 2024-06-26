@@ -19,19 +19,6 @@ class CountryRepository:
         db.session.commit()
         return new_item
 
-    # def query_country_with_user(bot_id: str):
-    #     world = (
-    #         db.session.query(World)
-    #         .options(
-    #             joinedload(World.assignment).joinedload(Assignment.user),
-    #             joinedload(World.content),
-    #         )
-    #         .filter(World.bot_id == bot_id)
-    #         .first()
-    #     )
-
-    #     return world
-
     def query_country_by_name(country: CountryDto):
         result = (
             db.session.query(Content)

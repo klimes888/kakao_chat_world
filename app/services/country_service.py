@@ -9,6 +9,7 @@ from app.dto.country_dto import CountryDto
 # services
 from app.services.user_service import UserService
 from app.services.world_service import WorldService
+from app.services.country_category_service import CountryCategoryService
 
 # repositories
 from app.repositories.user_repository import UserRepository
@@ -47,16 +48,21 @@ class CountryService:
         user_data = UserDto(name=data["user"], chat_id=data["chat_id"])
         user_result = UserRepository.add_user_flush(user_data)
 
-        data["world_id"] = world.id
+        data["world_id"] = world["id"]
         data["name"] = country_name
         country_data = CountryDto(**data)
         country_result = CountryRepository.add_country(country_data)
+
+        # 인문, 경제, 국방 추가
+        country_id = country_result.id
+        CountryCategoryService.add_country_category(country_id)
 
         assignment_item = AssignmentDto(
             user_id=user_result.id,
             content_id=country_result.id,
             role=UserRole["ADMIN"].value,
         )
+
         UserRepository.add_assignment(assignment_item)
         code = get_code("0006").format(
             country_data.name,

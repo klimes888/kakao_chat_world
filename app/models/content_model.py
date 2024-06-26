@@ -50,12 +50,12 @@ class Content(db.Model):
         return f"<Content(name={self.name}, chat_id={self.id})>"
 
 
-# 콘텐츠 하위 테이블
+# 콘텐츠 하위 테이블 (인문, 국방, 경제, 기술 등)
 class SubContent(db.Model):
     __tablename__ = "sub_content"
     id = Column(Integer, primary_key=True, autoincrement=True)
     content_id = Column(Integer, ForeignKey("content.id"), nullable=True)
-    desc = Column(String(150), nullable=False)  # 콘텐츠 설명
+    desc = Column(String(300), nullable=False)  # 콘텐츠 설명
     name = Column(String(40), nullable=False)  # 콘텐츠 이름
     type = Column(SmallInteger, nullable=False)  #  타입 SubContentType 참고
     value = Column(JSON, nullable=False)
@@ -81,19 +81,19 @@ class Status(db.Model):
 
 
 # 국방
-class ForceDefense(db.Model):
-    __tablename__ = "force_defense"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    sub_content_id = Column(Integer, ForeignKey("sub_content.id"), nullable=False)
-    desc = Column(String(300), nullable=False)  # 콘텐츠 설명
-    type = Column(SmallInteger, nullable=False)  #  타입 ForceDefenseType 참고
-    count = Column(String(12), nullable=False)  # 병력 수
-    value = Column(JSON, nullable=False)
-    update_at = Column(DateTime)
-    sub_content = relationship("SubContent", back_populates="force_defense")
+# class ForceDefense(db.Model):
+#     __tablename__ = "force_defense"
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     sub_content_id = Column(Integer, ForeignKey("sub_content.id"), nullable=False)
+#     desc = Column(String(300), nullable=False)  # 콘텐츠 설명
+#     type = Column(SmallInteger, nullable=False)  #  타입 ForceDefenseType 참고
+#     count = Column(String(12), nullable=False)  # 병력 수
+#     value = Column(JSON, nullable=False)
+#     update_at = Column(DateTime)
+#     sub_content = relationship("SubContent", back_populates="force_defense")
 
-    def __repr__(self):
-        return f"<ForceDefense(name={self.type}, value={self.value})>"
+#     def __repr__(self):
+#         return f"<ForceDefense(name={self.type}, value={self.value})>"
 
 
 # 무기 장비
